@@ -69,4 +69,13 @@ public class Perfil {
     public void setRut(String rut) {
         this.rut = rut;
     }
+
+    public String mostrarDatos() {
+        return "ID: " + id +
+                "\nNombre: " + nombre +
+                "\nEmail: " + email +
+                "\nContraseña: " + contrasena +
+                "\nEdad: " + edad +
+                "\nRUT: " + rut;
+    }
 }

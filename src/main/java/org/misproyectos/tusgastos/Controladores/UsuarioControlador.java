@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Controller
@@ -87,7 +88,15 @@ public class UsuarioControlador {
             usuario.setEmail(usuarioForm.getEmail());
             usuario.setEdad(usuarioForm.getEdad());
             usuario.setRut(usuarioForm.getRut());
-            usuario.setContrasena(usuarioForm.getContrasena());
+            String contrasena = usuarioForm.getContrasena();
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(contrasena.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) {
+                hexString.append(String.format("%02x", b));
+            }
+            usuario.setContrasena(hexString.toString());
 
             // Save the updated user
             servicio.agregar(usuario);
@@ -97,6 +106,8 @@ public class UsuarioControlador {
             ra.addFlashAttribute("mensaje", "El usuario de ID " + id + " no pudo ser editado");
             e.printStackTrace();
             return "redirect:/usuarios";
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 
