@@ -1,5 +1,6 @@
 package org.misproyectos.tusgastos.Controladores;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.misproyectos.tusgastos.Excepciones.UsuarioNoEncontradoException;
 import org.misproyectos.tusgastos.Modelo.Usuario;
 import org.misproyectos.tusgastos.Servicios.UsuarioServicio;
@@ -22,7 +23,7 @@ public class UsuarioControlador {
     @Autowired private UsuarioServicio servicio;
 
     @GetMapping("/home_usuarios")
-    public String mostrarListaUsuarios() {
+    public String mostrarListaUsuarios(HttpServletRequest request) {
         return "home_usuarios";
     }
 
@@ -101,7 +102,7 @@ public class UsuarioControlador {
             // Save the updated user
             servicio.agregar(usuario);
 
-            return "redirect:/usuarios"; // Redirect to the user list page or wherever you want
+            return "redirect:/usuarios";
         } catch (UsuarioNoEncontradoException e) {
             ra.addFlashAttribute("mensaje", "El usuario de ID " + id + " no pudo ser editado");
             e.printStackTrace();
@@ -123,6 +124,17 @@ public class UsuarioControlador {
         } catch (UsuarioNoEncontradoException e) {
             ra.addFlashAttribute("mensaje", e.getMessage());
             return "redirect:/usuarios";
+        }
+    }
+
+    public Usuario buscarUsuarioPorId(int id){
+        try {
+            System.out.println(id);
+            return servicio.buscar(id);
+        }
+        catch (UsuarioNoEncontradoException e){
+            System.out.println("usuario no encontrado");
+            return null;
         }
     }
 }

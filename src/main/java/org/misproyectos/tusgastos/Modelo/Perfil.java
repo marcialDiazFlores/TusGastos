@@ -3,7 +3,7 @@ package org.misproyectos.tusgastos.Modelo;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "perfiles")
+@Table(name = "perfiles", schema = "public")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
 public class Perfil {

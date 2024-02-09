@@ -1,47 +1,45 @@
 package org.misproyectos.tusgastos.Modelo;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "gastos")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TIPO_GASTO", discriminatorType = DiscriminatorType.STRING)
+@Table(name = "gastos", schema = "public")
 public class Gasto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(nullable = false, unique = false, length = 150, name = "descripcion")
     private String descripcion;
     @Column(nullable = false, unique = false, name = "monto")
     private Integer monto;
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
+    @Column(nullable = false, length = 50)
+    private String categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @Column(nullable = false)
+    private Integer usuarioId;
 
-    // Getter y Setter para usuario
-    public Usuario getUsuario() {
-        return usuario;
+    // Getter y Setter para gasto
+    public Integer getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -69,11 +67,11 @@ public class Gasto {
         this.fecha = fecha;
     }
 
-    public Categoria getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 }

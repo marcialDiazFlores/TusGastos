@@ -26,6 +26,7 @@ public class UsuarioServicio {
     public Usuario buscar(Integer id) throws UsuarioNoEncontradoException {
         Optional<Usuario> resultado = repositorio.findById(id);
         if (resultado.isPresent()) {
+            System.out.println("encontrado");
             return resultado.get();
         }
         throw new UsuarioNoEncontradoException("No se encontraron usuarios con el ID " + id);

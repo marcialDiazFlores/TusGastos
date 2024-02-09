@@ -1,5 +1,6 @@
 package org.misproyectos.tusgastos.Controladores;
 
+import jakarta.servlet.http.HttpSession;
 import org.misproyectos.tusgastos.Modelo.Administrador;
 import org.misproyectos.tusgastos.Modelo.Perfil;
 import org.misproyectos.tusgastos.Modelo.Usuario;
@@ -35,7 +36,7 @@ public class LoginControlador {
     }
 
     @PostMapping("/login")
-    public String procesarLogin(@RequestParam String email, @RequestParam String contrasena, Model modelo, RedirectAttributes ra) throws NoSuchAlgorithmException {
+    public String procesarLogin(@RequestParam String email, @RequestParam String contrasena, Model modelo, RedirectAttributes ra, HttpSession session) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] messageDigest = md.digest(contrasena.getBytes());
@@ -48,10 +49,14 @@ public class LoginControlador {
 
         if (perfil != null) {
             if (perfil instanceof Usuario) {
+                session.setAttribute("usuarioId", perfil.getId());
+                session.setAttribute("usuarioNombre", perfil.getNombre());
                 modelo.addAttribute("perfil", perfil);
                 // Redirigir a la página de usuario
-                return "redirect:/home_usuarios";
+                return "redirect:/gastos";
             } else if (perfil instanceof Administrador) {
+                session.setAttribute("adminId", perfil.getId());
+                session.setAttribute("adminNombre", perfil.getNombre());
                 modelo.addAttribute("perfil", perfil);
                 // Redirigir a la página de administrador
                 return "redirect:/home_admin";
